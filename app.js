@@ -21,7 +21,7 @@ io.on('connection',function(socket){
     players[thisPlayerId] = player;
     socket.emit('register', {id:thisPlayerId});
     socket.broadcast.emit('spawn', {id:thisPlayerId});
-    
+    socket.broadcast.emit('requestPosition');
 
     for(var playerId in players){
         if(playerId == thisPlayerId)
@@ -43,8 +43,15 @@ io.on('connection',function(socket){
 
     socket.on('move', function(data){
         data.id = thisPlayerId;
-       // console.log("Player Moved", JSON.stringify(data));
+        console.log("Player Moved", JSON.stringify(data));
+
         socket.broadcast.emit('move', data);
+
+        /*setTimeout(function(){
+            data.id = thisPlayerId;
+            console.log("Player Moved", JSON.stringify(data));
+            socket.broadcast.emit('move', data);
+        }, 2000)*/
     });
 
     socket.on('updatePosition', function(data){
